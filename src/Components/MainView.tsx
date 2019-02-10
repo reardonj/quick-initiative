@@ -7,6 +7,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import FilteringItem from './FilteringItem';
+import CombatStatusBar from './CombatStatusBar';
+import InitList from './InitList';
 
 const drawerWidth = 250;
 
@@ -27,11 +29,15 @@ const styles = (theme: any) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
+    marginLeft: drawerWidth
   },
   input: {
     margin: theme.spacing.unit,
   },
   toolbar: theme.mixins.toolbar,
+  grow: {
+    flexGrow: 1,
+  },
 });
 
 function MainView(props: any) {
@@ -45,6 +51,8 @@ function MainView(props: any) {
           <Typography variant="h6" color="inherit" noWrap>
             Quick Initiative
           </Typography>
+          <div className={classes.grow} />
+          <CombatStatusBar />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -53,10 +61,15 @@ function MainView(props: any) {
         classes={{
           paper: classes.drawerPaper,
         }}
+        anchor="left"
       >
         <div className={classes.toolbar} />
         <FilteringItem />
       </Drawer>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <InitList />
+      </main>
     </div>
   );
 }

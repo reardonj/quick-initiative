@@ -11,19 +11,18 @@ const styles = (theme: any) => ({
 
 const inits = [-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
 
-function InitSelector(props: any) {
-    const { classes, disabled } = props;
+function InitSelector(props: {classes: any, disabled: boolean, onSelected: ((x: number) => void)}) {
+    const { classes, disabled, onSelected } = props;
 
     const [anchor, setAnchor] = useState<HTMLElement|null>(null);
-    const [selectedIndex, setSelectedIndex] = useState(inits.length/2); 
 
     const handleClickButton = (event: MouseEvt) => {
         setAnchor(event.currentTarget);
     };
   
     const handleMenuItemClick = (event: MouseEvt, index: number) => {
-        setSelectedIndex(index);
         setAnchor(null);
+        onSelected(inits[index]);
     };
   
     const handleClose = () => {
