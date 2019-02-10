@@ -23,7 +23,7 @@ export {
 /* Combat State */
 
 let combatState = NotStarted;
-const [fireCombatStateEvents, subscribeToCombatState, unsubscribeToCombatState] =
+const {fire: fireCombatStateEvents, subscribe: subscribeToCombatState, unsubscribe: unsubscribeToCombatState} =
     createEventHandler(() => combatState);
 
 function startCombat() {
@@ -31,7 +31,7 @@ function startCombat() {
     const firstEntry = initIndexToEntry(0);
     firstEntry.entry = firstEntry.entry.toggleActive();
     fireCombatStateEvents();
-    firstEntry.handlers[0]();
+    firstEntry.handlers.fire();
 }
 
 /* Initiative Items */
@@ -40,15 +40,15 @@ let nextInitId = 0;
 const initiativeItems: number[] = [];
 const initiativeItemLookup:
     { [id: number]: InitiativeInfo } = {};
-const [fireInitEntryEvents, subscribeToInitEntries, unsubscribeToInitEntries] =
+const {fire: fireInitEntryEvents, subscribe: subscribeToInitEntries, unsubscribe: unsubscribeToInitEntries} =
     createEventHandler(() => getInitItems);
 
 function subscribeToInitEntry(id: number, handler: Handler<InitiativeEntry>) {
-    return initiativeItemLookup[id].handlers[1](handler);
+    return initiativeItemLookup[id].handlers.subscribe(handler);
 }
 
 function unsubscribeToInitEntry(id: number, handler: Handler<InitiativeEntry>) {
-    return initiativeItemLookup[id].handlers[2](handler);
+    return initiativeItemLookup[id].handlers.unsubscribe(handler);
 }
 
 function getInitItems(): InitiativeEntry[] {
@@ -85,7 +85,6 @@ function addInitEntry(name: string, init: number) {
     fireInitEntryEvents();
 }
 
-
 function nextInit() {
     if (!(combatState instanceof CurrentCombatState)) {
         return;
@@ -98,6 +97,6 @@ function nextInit() {
     initiativeItemLookup[nextItem.entry.id].entry = nextItem.entry.toggleActive();
 
     fireCombatStateEvents();
-    lastItem.handlers[0]();
-    nextItem.handlers[0]();
+    lastItem.handlers.fire();
+    nextItem.handlers.fire();
 }
