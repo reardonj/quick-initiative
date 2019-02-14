@@ -30,7 +30,11 @@ function InitList(props: any) {
         <div className={classes.root}>
             <Table>
                 <TableBody>
-                    {initItems.map((item) => (<InitRow item={item} key={item.id} />))}
+                    {initItems.map((item, index) =>
+                        (<InitRow
+                            item={item}
+                            key={item.id}/>
+                        ))}
                 </TableBody>
             </Table>
         </div>

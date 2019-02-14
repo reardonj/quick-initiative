@@ -7,7 +7,7 @@ export class CurrentCombatState {
     next(itemsInRound: number) {
         const nextActiveItem = (this.activeItem + 1) % itemsInRound;
         var nextRound = this.round;
-        if(nextActiveItem < this.activeItem) {
+        if(nextActiveItem <= this.activeItem) {
             nextRound++;
         }
         return new CurrentCombatState(nextRound, nextActiveItem);
