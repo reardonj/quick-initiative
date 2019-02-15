@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TableRow, TableCell, withStyles, IconButton, Menu, MenuItem } from "@material-ui/core";
+import { TableRow, TableCell, withStyles, IconButton, Menu, MenuItem, Typography } from "@material-ui/core";
 import { InitiativeEntry } from "../Model/InitiativeEntries";
 import * as InitModel from "../Model/InitModel";
 import { Delete, ArrowUpward, ArrowDownwardOutlined, FileCopy, ArrowDownward } from "@material-ui/icons";
@@ -13,7 +13,6 @@ const styles = (theme: any) => ({
         padding: 'checkbox'
     },
     titleCell: {
-        'font-weight': 'bold',
         width: '100%'
     },
     actionCell: {
@@ -53,7 +52,9 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
     return (
         <TableRow selected={item.active}>
             <TableCell className={classes.initCell}>{item.init}</TableCell>
-            <TableCell className={classes.titleCell}>{item.name}</TableCell>
+            <TableCell className={classes.titleCell}>
+                <Typography variant="subheading">{item.name}</Typography>
+            </TableCell>
             <TableCell className={classes.actionCell} padding="checkbox">
                 <div style={{ display: 'flex' }}>
                     <IconButton onClick={e => InitModel.moveInitEntryUp(item)} disabled={!item.canMoveUp}>

@@ -1,48 +1,81 @@
-import React, { useState, ChangeEvent, useRef } from 'react';
-import { Input, withStyles } from "@material-ui/core";
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Input, withStyles, List, ListItem, ListItemText, ListItemSecondaryAction } from "@material-ui/core";
 import InitSelector from "./InitSelector";
 import * as InitModel from '../Model/InitModel';
+import * as HistoryModel from '../Model/HistoryModel';
+import { defaultHistoryEntrySort } from '../Model/HistoryEntries';
+import HistoryItem from './HistoryItem';
 
 
 const styles = (theme: any) => ({
     input: {
-      margin: theme.spacing.unit,
     }
-  });
+});
 
-function isNullOrEmpty(str: string|null) {
+function isNullOrEmpty(str: string | null) {
     return str === null || str.match(/^ *$/) !== null;
 }
 
-function FilteringItem(props: {classes: any}) {
+function FilteringItem(props: { classes: any }) {
     const { classes } = props;
 
     const inputEl = useRef<HTMLInputElement>(null);
     const [isSelectorDisabled, setSelectorDisabled] = useState(true);
+    const [filterText, setFilterText] = useState("");
+    const [historyList, setHistoryList] = useState(HistoryModel.getHistoryItems());
+
+    const filteredList = useMemo(
+        () => historyList.filter(x => x.name.includes(filterText)).sort(defaultHistoryEntrySort),
+        [historyList, filterText]);
+
+    useEffect(() => {
+        HistoryModel.subscribeToHistoryItems(setHistoryList);
+        // Specify how to clean up after this effect:
+        return function cleanup() {
+            HistoryModel.unsubscribeToHistoryItems(setHistoryList);
+        };
+    });
 
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setSelectorDisabled(isNullOrEmpty(event.currentTarget.value));
+        setFilterText(event.currentTarget.value);
     };
     const handleInitSelected = (init: number) => {
-        if(inputEl.current == null) {
+        if (inputEl.current == null) {
             return;
         }
         InitModel.addInitEntry(inputEl.current.value, init)
-        inputEl.current.focus();
+        HistoryModel.addHistoryItem(inputEl.current.value);
+        inputEl.current.value = "";
+        setSelectorDisabled(true);
+        setFilterText("");
     };
 
     return (
         <div>
-            <Input
-                inputRef={inputEl}
-                placeholder="Name"
-                onChange={handleTextChange}
-                className={classes.input}
-                inputProps={{
-                    'aria-label': 'Name',
-            }} />
-            <InitSelector disabled={isSelectorDisabled} onSelected={handleInitSelected} />
-          </div>
+            <List>
+                <ListItem>
+                    <ListItemText>
+                        <Input
+                            inputRef={inputEl}
+                            placeholder="Name"
+                            onChange={handleTextChange}
+                            className={classes.input}
+                            inputProps={{
+                                'aria-label': 'Name',
+                            }} />
+                    </ListItemText>
+                    <ListItemSecondaryAction>
+                        <InitSelector disabled={isSelectorDisabled} onSelected={handleInitSelected} />
+                    </ListItemSecondaryAction>
+                </ListItem>
+            </List>
+            <List>
+                {filteredList.map(x =>
+                    <HistoryItem key={x.id} item={x} />
+                )}
+            </List>
+        </div>
     )
 }
 

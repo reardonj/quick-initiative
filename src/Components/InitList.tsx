@@ -22,7 +22,7 @@ function InitList(props: any) {
         InitModel.subscribeToInitEntries(setInitItems);
         // Specify how to clean up after this effect:
         return function cleanup() {
-            InitModel.subscribeToInitEntries(setInitItems);
+            InitModel.unsubscribeToInitEntries(setInitItems);
         };
     });
 
