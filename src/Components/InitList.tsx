@@ -18,13 +18,7 @@ function InitList(props: any) {
     const { classes } = props;
     const [initItems, setInitItems] = useState(InitModel.getInitItems());
 
-    useEffect(() => {
-        InitModel.subscribeToInitEntries(setInitItems);
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            InitModel.unsubscribeToInitEntries(setInitItems);
-        };
-    });
+    InitModel.useInitEntryListEvents(setInitItems);
 
     return (
         <div className={classes.root}>

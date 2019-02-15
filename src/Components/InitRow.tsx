@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TableRow, TableCell, withStyles, IconButton, Menu, MenuItem, Typography } from "@material-ui/core";
 import { InitiativeEntry } from "../Model/InitiativeEntries";
 import * as InitModel from "../Model/InitModel";
-import { Delete, ArrowUpward, ArrowDownwardOutlined, FileCopy, ArrowDownward } from "@material-ui/icons";
+import { Delete, ArrowUpward, FileCopy, ArrowDownward } from "@material-ui/icons";
 
 type MouseEvt = React.MouseEvent<HTMLElement, MouseEvent>;
 
@@ -42,12 +42,7 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
         setAnchor(null);
     };
 
-    useEffect(() => {
-        InitModel.subscribeToInitEntry(item.id, setItem);
-        return function cleanup() {
-            InitModel.unsubscribeToInitEntry(item.id, setItem);
-        }
-    });
+    InitModel.useInitEntryEvents(item.id, setItem);
 
     return (
         <TableRow selected={item.active}>

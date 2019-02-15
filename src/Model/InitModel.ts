@@ -8,8 +8,7 @@ export type CombatStateHandler = Handler<CombatState>;
 export type InitEntryHandler = Handler<InitiativeEntry[]>
 
 export {
-    subscribeToCombatState,
-    unsubscribeToCombatState,
+    useCombatStateEvents,
     startCombat,
     nextInit,
     addInitEntry,
@@ -18,17 +17,14 @@ export {
     moveInitEntryDown,
     moveInitEntryUp,
     getInitItems,
-    subscribeToInitEntries,
-    unsubscribeToInitEntries,
-    subscribeToInitEntry,
-    unsubscribeToInitEntry
+    useInitEntryListEvents,
+    useInitEntryEvents
 }
 
 /* Combat State */
 
 let combatState = NotStarted;
-const { fire: fireCombatStateEvents, subscribe: subscribeToCombatState, unsubscribe: unsubscribeToCombatState } =
-    createEventHandler(() => combatState);
+const { fire: fireCombatStateEvents, useEvents: useCombatStateEvents } = createEventHandler(() => combatState);
 
 function startCombat() {
     if (initiativeItems.length == 0) {
@@ -47,16 +43,11 @@ let nextInitId = 0;
 const initiativeItems: number[] = [];
 const initiativeItemLookup:
     { [id: number]: InitiativeInfo } = {};
-const { fire: fireInitEntryEvents, subscribe: subscribeToInitEntries, unsubscribe: unsubscribeToInitEntries } =
+const { fire: fireInitEntryEvents, useEvents: useInitEntryListEvents } =
     createEventHandler(() => getInitItems);
 
-function subscribeToInitEntry(id: number, handler: Handler<InitiativeEntry>) {
-    return initiativeItemLookup[id].handlers.subscribe(handler);
-}
-
-function unsubscribeToInitEntry(id: number, handler: Handler<InitiativeEntry>) {
-    const entry = initiativeItemLookup[id]
-    return entry && entry.handlers.unsubscribe(handler);
+function useInitEntryEvents(id: number, handler: Handler<InitiativeEntry>) {
+    initiativeItemLookup[id].handlers.useEvents(handler);
 }
 
 function getInitItems(): InitiativeEntry[] {

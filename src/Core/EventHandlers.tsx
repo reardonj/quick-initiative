@@ -1,16 +1,19 @@
+import { useEffect } from "react";
+
 export type Handler<T> = (x: T) => void;
 export interface EventDefinition<T> {
     fire: () => void,
-    subscribe: (x: Handler<T>) => void,
-    unsubscribe: (x: Handler<T>) => void
+    useEvents: (x: Handler<T>) => void
 };
 
 export function createEventHandler<T>(state: () => T): EventDefinition<T> {
     let handlerList: Handler<T>[] = [];
     return {
         fire: () => fire(handlerList, state()),
-        subscribe: (x: Handler<T>) => handlerList.push(x),
-        unsubscribe: (x: Handler<T>) => unsubscribe(handlerList, x)
+        useEvents: (x: Handler<T>) => useEffect(() => {
+            handlerList.push(x);
+            return () => unsubscribe(handlerList, x);
+        })
     };
 }
 

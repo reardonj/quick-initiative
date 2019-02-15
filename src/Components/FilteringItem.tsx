@@ -28,13 +28,7 @@ function FilteringItem(props: { classes: any }) {
         () => historyList.filter(x => x.name.includes(filterText)).sort(defaultHistoryEntrySort),
         [historyList, filterText]);
 
-    useEffect(() => {
-        HistoryModel.subscribeToHistoryItems(setHistoryList);
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            HistoryModel.unsubscribeToHistoryItems(setHistoryList);
-        };
-    });
+    HistoryModel.useHistoryItemEvents(setHistoryList);
 
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setSelectorDisabled(isNullOrEmpty(event.currentTarget.value));

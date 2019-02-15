@@ -2,8 +2,7 @@ import { createEventHandler } from "../Core/EventHandlers";
 import { HistoryEntry } from "./HistoryEntries";
 
 export {
-    subscribeToHistoryItems,
-    unsubscribeToHistoryItems,
+    useHistoryItemEvents,
     getHistoryItems,
     addHistoryItem,
 }
@@ -12,8 +11,7 @@ let nextHistoryId = 0;
 const historyItems: Map<string, HistoryEntry> = new Map();
 const {
     fire: fireHistoryEntryEvents,
-    subscribe: subscribeToHistoryItems,
-    unsubscribe: unsubscribeToHistoryItems
+    useEvents: useHistoryItemEvents,
 } = createEventHandler(() => getHistoryItems);
 
 function getHistoryItems(): HistoryEntry[] {
