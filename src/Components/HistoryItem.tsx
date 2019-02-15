@@ -1,8 +1,10 @@
-import React from 'react';
-import { withStyles, ListItem, ListItemText, ListItemSecondaryAction } from '@material-ui/core';
+import React, { useState } from 'react';
+import { withStyles, ListItem, ListItemText, ListItemSecondaryAction, ListItemIcon, IconButton } from '@material-ui/core';
 import { HistoryEntry } from '../Model/HistoryEntries';
 import InitSelector from './InitSelector';
 import * as InitModel from '../Model/InitModel';
+import * as HistoryModel from '../Model/HistoryModel';
+import { FavoriteOutlined } from '@material-ui/icons';
 
 const styles = (theme: any) => ({
     input: {
@@ -11,16 +13,26 @@ const styles = (theme: any) => ({
 });
 
 function HistoryItem(props: { classes: any, item: HistoryEntry }) {
-    const { classes, item } = props;
+    const { classes } = props;
+    const [item, setItem] = useState(props.item);
+    HistoryModel.useHistoryItemEvents(props.item.name, setItem);
 
     const handleInitSelected = (init: number) => {
         InitModel.addInitEntry(item.name, init);
     }
 
+    const handleClick = () => {
+        HistoryModel.toggleFavourite(item.name);
+    }
+
     return (
-        <ListItem>
+        <ListItem dense button onClick={handleClick}>
             <ListItemText primary={item.name} />
             <ListItemSecondaryAction>
+            {item.isFavourite ?
+                <IconButton onClick={handleClick}><FavoriteOutlined /></IconButton> :
+                <></>
+            }
                 <InitSelector disabled={false} onSelected={handleInitSelected} />
             </ListItemSecondaryAction>
         </ListItem>

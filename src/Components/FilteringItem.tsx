@@ -28,7 +28,10 @@ function FilteringItem(props: { classes: any }) {
         () => historyList.filter(x => x.name.includes(filterText)).sort(defaultHistoryEntrySort),
         [historyList, filterText]);
 
-    HistoryModel.useHistoryItemEvents(setHistoryList);
+    HistoryModel.useHistoryItemListEvents(x => {
+        setHistoryList(x);
+        HistoryModel.saveToLocalStorage();   
+    });
 
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setSelectorDisabled(isNullOrEmpty(event.currentTarget.value));
@@ -66,7 +69,7 @@ function FilteringItem(props: { classes: any }) {
             </List>
             <List>
                 {filteredList.map(x =>
-                    <HistoryItem key={x.id} item={x} />
+                    <HistoryItem key={x.name} item={x} />
                 )}
             </List>
         </div>
