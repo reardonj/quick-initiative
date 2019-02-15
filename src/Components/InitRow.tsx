@@ -24,7 +24,7 @@ const duplicates = [1, 2, 3, 4];
 
 function InitRow(props: { classes: any, item: InitiativeEntry }) {
     const { classes } = props;
-    const [item, setItem] = useState(props.item);
+    const item = InitModel.useInitEntryEvents(props.item.id, () => {});
 
 
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
@@ -42,7 +42,6 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
         setAnchor(null);
     };
 
-    InitModel.useInitEntryEvents(item.id, setItem);
 
     return (
         <TableRow selected={item.active}>

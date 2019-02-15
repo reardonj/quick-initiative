@@ -25,7 +25,7 @@ function useHistoryItemEvents(name: string, handler: Handler<HistoryEntry>) {
     if (!item) {
         throw new Error("Tried to get evetns for non-existant entry.");
     }
-    item.handlers.useEvents(handler);
+    return item.handlers.useEvents(handler);
 }
 
 function toggleFavourite(name: string) {

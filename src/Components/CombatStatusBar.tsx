@@ -11,10 +11,9 @@ const styles = (theme: any) => ({
   });
 
 function CombatStatusBar(props: any) {
-    const [combatState, setCombatState] = useState(NotStarted);
     const { classes } = props;
 
-    InitModel.useCombatStateEvents(setCombatState);
+    const combatState = InitModel.useCombatStateEvents(() => {});
 
     if (combatState instanceof CurrentCombatState) {
         return (

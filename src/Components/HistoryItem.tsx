@@ -14,8 +14,7 @@ const styles = (theme: any) => ({
 
 function HistoryItem(props: { classes: any, item: HistoryEntry }) {
     const { classes } = props;
-    const [item, setItem] = useState(props.item);
-    HistoryModel.useHistoryItemEvents(props.item.name, setItem);
+    const item = HistoryModel.useHistoryItemEvents(props.item.name, () => { });
 
     const handleInitSelected = (init: number) => {
         InitModel.addInitEntry(item.name, init);
@@ -29,10 +28,10 @@ function HistoryItem(props: { classes: any, item: HistoryEntry }) {
         <ListItem dense button onClick={handleClick}>
             <ListItemText primary={item.name} />
             <ListItemSecondaryAction>
-            {item.isFavourite ?
-                <IconButton onClick={handleClick}><FavoriteOutlined /></IconButton> :
-                <></>
-            }
+                {item.isFavourite ?
+                    <IconButton onClick={handleClick}><FavoriteOutlined /></IconButton> :
+                    <></>
+                }
                 <InitSelector disabled={false} onSelected={handleInitSelected} />
             </ListItemSecondaryAction>
         </ListItem>

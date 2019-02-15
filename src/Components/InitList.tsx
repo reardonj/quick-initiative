@@ -16,9 +16,7 @@ const styles = (theme: any) => ({
 
 function InitList(props: any) {
     const { classes } = props;
-    const [initItems, setInitItems] = useState(InitModel.getInitItems());
-
-    InitModel.useInitEntryListEvents(setInitItems);
+    const initItems = InitModel.useInitEntryListEvents(() => {});
 
     return (
         <div className={classes.root}>

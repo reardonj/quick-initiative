@@ -22,16 +22,13 @@ function FilteringItem(props: { classes: any }) {
     const inputEl = useRef<HTMLInputElement>(null);
     const [isSelectorDisabled, setSelectorDisabled] = useState(true);
     const [filterText, setFilterText] = useState("");
-    const [historyList, setHistoryList] = useState(HistoryModel.getHistoryItems());
+
+    const historyList = HistoryModel.useHistoryItemListEvents(HistoryModel.saveToLocalStorage);
 
     const filteredList = useMemo(
         () => historyList.filter(x => x.name.includes(filterText)).sort(defaultHistoryEntrySort),
         [historyList, filterText]);
 
-    HistoryModel.useHistoryItemListEvents(x => {
-        setHistoryList(x);
-        HistoryModel.saveToLocalStorage();   
-    });
 
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setSelectorDisabled(isNullOrEmpty(event.currentTarget.value));

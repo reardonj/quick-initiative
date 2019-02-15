@@ -41,13 +41,11 @@ function startCombat() {
 
 let nextInitId = 0;
 const initiativeItems: number[] = [];
-const initiativeItemLookup:
-    { [id: number]: InitiativeInfo } = {};
-const { fire: fireInitEntryEvents, useEvents: useInitEntryListEvents } =
-    createEventHandler(() => getInitItems);
+const initiativeItemLookup: { [id: number]: InitiativeInfo } = {};
+const { fire: fireInitEntryEvents, useEvents: useInitEntryListEvents } = createEventHandler(getInitItems);
 
 function useInitEntryEvents(id: number, handler: Handler<InitiativeEntry>) {
-    initiativeItemLookup[id].handlers.useEvents(handler);
+    return initiativeItemLookup[id].handlers.useEvents(handler);
 }
 
 function getInitItems(): InitiativeEntry[] {
