@@ -67,7 +67,7 @@ function addInitAtIndex(name: string, init: number, itemIndex: number) {
     initiativeItems.splice(itemIndex, 0, item.id);
 
     // If we added an item above the current item in combat, move the activeItem down one.
-    if (combatState instanceof CurrentCombatState && combatState.activeItem <= itemIndex) {
+    if (combatState instanceof CurrentCombatState && combatState.activeItem >= itemIndex) {
         combatState = new CurrentCombatState(combatState.round, combatState.activeItem + 1)
         fireCombatStateEvents();
     }
