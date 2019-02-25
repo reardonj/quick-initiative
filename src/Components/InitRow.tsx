@@ -26,7 +26,7 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
     const { classes } = props;
     const item = InitModel.useInitEntryEvents(props.item.id, () => {});
 
-
+    
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
     const handleClickButton = (event: MouseEvt) => {

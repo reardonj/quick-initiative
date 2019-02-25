@@ -32,7 +32,7 @@ function startCombat() {
     }
     combatState = new CurrentCombatState(1, 0);
     const firstEntry = initIndexToEntry(0);
-    firstEntry.entry = firstEntry.entry.toggleActive();
+    firstEntry.entry = firstEntry.entry.updateActive(true);
     fireCombatStateEvents();
     firstEntry.handlers.fire();
 }
@@ -122,7 +122,7 @@ function removeInitEntry(entry: InitiativeEntry) {
             // And the actual active item if we removed the current selection.
             if (entry.active) {
                 const newActiveItem = initIndexToEntry(newActiveIndex);
-                toggleActive(newActiveItem)
+                updateActive(newActiveItem, true)
                 newActiveItem.handlers.fire();
             }
         }
@@ -205,14 +205,14 @@ function nextInit() {
     combatState = combatState.next(initiativeItems.length);
     const nextItem = initiativeItemLookup[initiativeItems[combatState.activeItem]];
 
-    toggleActive(lastItem);
-    toggleActive(nextItem);
+    updateActive(lastItem, false);
+    updateActive(nextItem, true);
 
     fireCombatStateEvents();
     lastItem.handlers.fire();
     nextItem.handlers.fire();
 }
 
-function toggleActive(info: InitiativeInfo) {
-    initiativeItemLookup[info.entry.id].entry = info.entry.toggleActive();
+function updateActive(info: InitiativeInfo, isActive: boolean) {
+    initiativeItemLookup[info.entry.id].entry = info.entry.updateActive(isActive);
 }

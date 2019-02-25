@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Input, withStyles, List, ListItem, ListItemText, ListItemSecondaryAction } from "@material-ui/core";
+import { Input, withStyles, List, ListItem, ListItemText, ListItemSecondaryAction, ListSubheader } from "@material-ui/core";
 import InitSelector from "./InitSelector";
 import * as InitModel from '../Model/InitModel';
 import * as HistoryModel from '../Model/HistoryModel';
@@ -9,6 +9,13 @@ import HistoryItem from './HistoryItem';
 
 const styles = (theme: any) => ({
     input: {
+    },
+    historyList: {
+        overflow: 'scroll',
+        height: 'calc(100% - 70px)'
+    },
+    filteringBar: {
+        overflow: 'hidden'
     }
 });
 
@@ -29,6 +36,9 @@ function FilteringItem(props: { classes: any }) {
         () => historyList.filter(x => x.name.includes(filterText)).sort(defaultHistoryEntrySort),
         [historyList, filterText]);
 
+    const favourites = filteredList.filter(x => x.isFavourite);
+    const others = filteredList.filter(x => !x.isFavourite);
+
 
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setSelectorDisabled(isNullOrEmpty(event.currentTarget.value));
@@ -46,7 +56,7 @@ function FilteringItem(props: { classes: any }) {
     };
 
     return (
-        <div>
+        <div className={classes.filteringBar}>
             <List>
                 <ListItem>
                     <ListItemText>
@@ -64,11 +74,26 @@ function FilteringItem(props: { classes: any }) {
                     </ListItemSecondaryAction>
                 </ListItem>
             </List>
-            <List>
-                {filteredList.map(x =>
-                    <HistoryItem key={x.name} item={x} />
-                )}
-            </List>
+            <div className={classes.historyList}>
+                {
+                    favourites.length > 0 ? (
+                        <List>
+                            <ListSubheader disableSticky={true}>Favourites</ListSubheader>
+                            {favourites.map(x => <HistoryItem key={x.name} item={x} />)}
+                        </List>
+                    ) :
+                        <></>
+                }
+                {
+                    others.length > 0 ? (
+                        <List>
+                            <ListSubheader disableSticky={true}>Others</ListSubheader>
+                            {others.map(x => <HistoryItem key={x.name} item={x} />)}
+                        </List>
+                    ) :
+                        <></>
+                }
+            </div>
         </div>
     )
 }

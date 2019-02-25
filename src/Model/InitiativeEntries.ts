@@ -7,8 +7,8 @@ export class InitiativeEntry {
         readonly canMoveDown: boolean,
         readonly canMoveUp: boolean) { }
 
-    toggleActive(): InitiativeEntry {
-        return new InitiativeEntry(this.name, this.init, this.id, !this.active, this.canMoveDown, this.canMoveUp);
+    updateActive(isActive: boolean): InitiativeEntry {
+        return new InitiativeEntry(this.name, this.init, this.id, isActive, this.canMoveDown, this.canMoveUp);
     }
 
     updateMovement(index: number, totalItems: number): InitiativeEntry {

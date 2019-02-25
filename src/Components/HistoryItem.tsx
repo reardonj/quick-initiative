@@ -28,10 +28,6 @@ function HistoryItem(props: { classes: any, item: HistoryEntry }) {
         <ListItem dense button onClick={handleClick}>
             <ListItemText primary={item.name} />
             <ListItemSecondaryAction>
-                {item.isFavourite ?
-                    <IconButton onClick={handleClick}><FavoriteOutlined /></IconButton> :
-                    <></>
-                }
                 <InitSelector disabled={false} onSelected={handleInitSelected} />
             </ListItemSecondaryAction>
         </ListItem>
