@@ -83,7 +83,7 @@ function findAddIndex(init: number): number {
     for (var i = 0; i < initiativeItems.length; i++) {
         if (initIndexToEntry(i).entry.init <= init) {
             return i;
-        }20
+        }
     }
 
     return initiativeItems.length;

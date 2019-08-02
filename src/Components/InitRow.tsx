@@ -47,7 +47,7 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
         <TableRow selected={item.active}>
             <TableCell className={classes.initCell}>{item.init}</TableCell>
             <TableCell className={classes.titleCell}>
-                <Typography variant="subheading">{item.name}</Typography>
+                <Typography variant="subtitle1">{item.name}</Typography>
             </TableCell>
             <TableCell className={classes.actionCell} padding="checkbox">
                 <div style={{ display: 'flex' }}>
