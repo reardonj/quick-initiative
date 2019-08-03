@@ -72,7 +72,7 @@ function FilteringItem(props: { classes: any }) {
             return;
         }
         InitModel.addInitEntry(inputEl.current.value, init)
-        HistoryModel.addHistoryItem(inputEl.current.value, []);
+        HistoryModel.addHistoryItem(inputEl.current.value, [""]);
         inputEl.current.value = "";
         setSelectorDisabled(true);
         setFilterText("");
@@ -113,14 +113,12 @@ function FilteringItem(props: { classes: any }) {
             <div className={classes.historyList}>
                 {
                     Array.from(groups).sort((a,b)=> a[0].localeCompare(b[0])).map(entry => 
-                    {
-                        return <List>
+                        <List>
                             <ListSubheader disableSticky={true}>{entry[0]}</ListSubheader>
                             {(entry[1] as HistoryEntry[]).map(
                                 x => <HistoryItem key={x.name} item={x} showInit={true} />)
                             }
-                        </List>
-                    })
+                        </List>)
                 }
                 {
                     others.length > 0 ? (
