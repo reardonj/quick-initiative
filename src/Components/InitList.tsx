@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { withStyles, List, ListItem, Table, TableRow, TableCell, TableBody } from "@material-ui/core";
+import React from "react";
+import { withStyles, Table, TableBody } from "@material-ui/core";
 import * as InitModel from "../Model/InitModel";
 import InitRow from "./InitRow";
 
@@ -22,7 +22,7 @@ function InitList(props: any) {
         <div className={classes.root}>
             <Table>
                 <TableBody>
-                    {initItems.map((item, index) =>
+                    {initItems.map((item) =>
                         (<InitRow
                             item={item}
                             key={item.id}/>

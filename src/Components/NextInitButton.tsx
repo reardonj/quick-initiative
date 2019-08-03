@@ -19,7 +19,7 @@ function NextInitButton(props: any) {
     
     return (
         <Fab className={classes.fab} 
-             
+             color='primary'
              onClick={() => combatState instanceof CurrentCombatState ? 
                                 InitModel.nextInit() : 
                                 InitModel.startCombat()}>

@@ -1,8 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { withStyles, ListItem, ListItemText, ListItemSecondaryAction, Input, Button, IconButton } from '@material-ui/core';
-import { HistoryEntry } from '../Model/HistoryEntries';
-import InitSelector from './InitSelector';
-import * as InitModel from '../Model/InitModel';
+import { withStyles, ListItem, ListItemText, ListItemSecondaryAction, Input, IconButton } from '@material-ui/core';
 import * as HistoryModel from '../Model/HistoryModel';
 import { isNullOrEmpty } from '../Core/StringUtils';
 import { LibraryAdd } from '@material-ui/icons';

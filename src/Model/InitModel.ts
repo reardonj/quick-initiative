@@ -8,6 +8,7 @@ export type CombatStateHandler = Handler<CombatState>;
 export type InitEntryHandler = Handler<InitiativeEntry[]>
 
 export {
+    // eslint-disable-next-line
     useCombatStateEvents,
     startCombat,
     nextInit,
@@ -17,7 +18,9 @@ export {
     moveInitEntryDown,
     moveInitEntryUp,
     getInitItems,
+    // eslint-disable-next-line
     useInitEntryListEvents,
+    // eslint-disable-next-line
     useInitEntryEvents
 }
 
@@ -27,7 +30,7 @@ let combatState = NotStarted;
 const { fire: fireCombatStateEvents, useEvents: useCombatStateEvents } = createEventHandler(() => combatState);
 
 function startCombat() {
-    if (initiativeItems.length == 0) {
+    if (initiativeItems.length === 0) {
         return;
     }
     combatState = new CurrentCombatState(1, 0);
@@ -90,7 +93,7 @@ function findAddIndex(init: number): number {
 }
 
 function duplicateInitEntry(item: InitiativeEntry, times: number) {
-    const index = initiativeItems.findIndex(x => x == item.id)
+    const index = initiativeItems.findIndex(x => x === item.id)
     const info = initiativeItemLookup[initiativeItems[index]];
     for (let i = 0; i < times; i++) {
         let name = info.entry.name + " (" + (i + 2) + ")";
@@ -144,11 +147,11 @@ function moveInitEntryDown(entry: InitiativeEntry) {
 }
 
 function moveInitEntryUp(entry: InitiativeEntry) {
-    const index = initiativeItems.findIndex(x => x == entry.id);
-    if (index == -1) {
+    const index = initiativeItems.findIndex(x => x === entry.id);
+    if (index === -1) {
         throw new Error("Tried to move initiative entry that doesn't exist. ID:" + entry.id);
     }
-    if (index == 0) {
+    if (index === 0) {
         return;
     }
 
@@ -164,10 +167,10 @@ function swapInits(index1: number, index2: number) {
     const secondEvent = updateMovementForIndex(index2);
 
     if (combatState instanceof CurrentCombatState) {
-        if (index1 == combatState.activeItem) {
+        if (index1 === combatState.activeItem) {
             combatState = new CurrentCombatState(combatState.round, index2);
             fireCombatStateEvents();
-        } else if (index2 == combatState.activeItem) {
+        } else if (index2 === combatState.activeItem) {
             combatState = new CurrentCombatState(combatState.round, index1);
             fireCombatStateEvents();
         }
