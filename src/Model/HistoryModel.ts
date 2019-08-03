@@ -11,6 +11,9 @@ export {
     useHistoryItemEvents,
     getHistoryItems,
     addHistoryItem,
+    addHistoryItemToGroup,
+    removeHistoryItemFromGroup,
+    renameGroup,
     saveToLocalStorage
 }
 
@@ -34,9 +37,9 @@ function addHistoryItem(name: string, groups: string[]) {
     }
 
     const entry = new HistoryEntry(name);
-    for(const group in groups) {
+    groups.forEach(group => {
         entry.groups.add(group);
-    }
+    });
 
     historyItems.set(name,
         {
@@ -46,16 +49,49 @@ function addHistoryItem(name: string, groups: string[]) {
                 if (item) {
                     return item.entry;
                 }
-                throw new Error("Missing history item");
+                throw new Error("Missing history item.");
             })
         });
+    fireHistoryEntryListEvents();
+}
+
+function addHistoryItemToGroup(item: HistoryEntry, group: string) {
+    const entry = historyItems.get(item.name);
+    if(!entry) {
+        throw new Error("Missing history item.")
+    }
+
+    entry.entry.groups.add(group);
+    entry.handlers.fire();
+    fireHistoryEntryListEvents();
+}
+
+function removeHistoryItemFromGroup(item: HistoryEntry, group: string) {
+    const entry = historyItems.get(item.name);
+    if(!entry) {
+        throw new Error("Missing history item.")
+    }
+
+    if(entry.entry.groups.delete(group)) {
+        entry.handlers.fire();
+        fireHistoryEntryListEvents();
+    }
+}
+
+function renameGroup(oldName: string, newName: string) {
+    historyItems.forEach(item => {
+        if(item.entry.groups.delete(oldName)) {
+            item.entry.groups.add(newName);
+            item.handlers.fire();
+        }
+    });
     fireHistoryEntryListEvents();
 }
 
 function saveToLocalStorage() {
     localStorage.setItem("historyItems",
         JSON.stringify(getHistoryItems().map((x: HistoryEntry): object =>
-            ({ name: x.name, groups: Array.from(x.groups.entries())}))));
+            ({ name: x.name, groups: Array.from(x.groups).filter(x => x.length > 0)}))));
 }
 
 

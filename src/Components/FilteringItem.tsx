@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Input, withStyles, List, ListItem, ListItemText, ListItemSecondaryAction, ListSubheader } from "@material-ui/core";
+import React, { useState, useRef, useMemo } from 'react';
+import { Input, withStyles, List, ListItem, ListItemText, ListItemSecondaryAction, ListSubheader, Divider } from "@material-ui/core";
 import InitSelector from "./InitSelector";
 import * as InitModel from '../Model/InitModel';
 import * as HistoryModel from '../Model/HistoryModel';
 import { defaultHistoryEntrySort, HistoryEntry } from '../Model/HistoryEntries';
 import HistoryItem from './HistoryItem';
-import { string } from 'prop-types';
+import GroupCreator from './GroupCreator';
+import { isNullOrEmpty } from '../Core/StringUtils';
 
-
-const styles = (theme: any) => ({
+const styles = () => ({
     input: {
     },
     historyList: {
@@ -20,17 +20,15 @@ const styles = (theme: any) => ({
     }
 });
 
-function isNullOrEmpty(str: string | null) {
-    return str === null || str.match(/^ *$/) !== null;
-}
-
 function groupHasText(item: HistoryEntry, filterText: string): boolean {
-    for(const group in item.groups.entries()) {
-        if(group.includes(filterText)) {
-            return true;
+    let hasText = false;
+    item.groups.forEach(x => {
+        if(x.includes(filterText)) {
+            hasText = true;
         }
-    }
-    return false;
+    });
+
+    return hasText;
 }
 
 function FilteringItem(props: { classes: any }) {
@@ -48,16 +46,20 @@ function FilteringItem(props: { classes: any }) {
                                 ).sort(defaultHistoryEntrySort),
         [historyList, filterText]);
 
-    const others = filteredList.filter(x => x.groups.size == 0);
+    const pendingGroup = historyList.filter(x => x.groups.has(""));
+    const others = filteredList.filter(x => x.groups.size === 0);
     const groups = new Map<string, HistoryEntry[]>();
     for(const item of filteredList) {
-        for(const group in item.groups) {
+        item.groups.forEach(group => {
+            if(isNullOrEmpty(group)) {
+                return;
+            }
             if (!groups.has(group)) {
                 groups.set(group, []);
             }
             const toAdd = groups.get(group) as HistoryEntry[];
             toAdd.push(item);
-        }
+        });
     }
 
 
@@ -95,13 +97,28 @@ function FilteringItem(props: { classes: any }) {
                     </ListItemSecondaryAction>
                 </ListItem>
             </List>
+            <Divider />
+            {
+                pendingGroup.length > 0 ? (
+                    <List>
+                        <GroupCreator ></GroupCreator>  
+                        {pendingGroup.map(
+                            x => <HistoryItem key={x.name} item={x} showInit={false} />)
+                        }
+                        <Divider />
+                    </List>
+                ) :
+                    <></>
+            }
             <div className={classes.historyList}>
                 {
-                    Array.from(groups.entries(), ([key, value]) => [key, value]).map(([key, value]) => 
+                    Array.from(groups).sort((a,b)=> a[0].localeCompare(b[0])).map(entry => 
                     {
                         return <List>
-                            <ListSubheader disableSticky={true}>key</ListSubheader>
-                            {(value as HistoryEntry[]).map(x => <HistoryItem key={x.name} item={x} />)}
+                            <ListSubheader disableSticky={true}>{entry[0]}</ListSubheader>
+                            {(entry[1] as HistoryEntry[]).map(
+                                x => <HistoryItem key={x.name} item={x} showInit={true} />)
+                            }
                         </List>
                     })
                 }
@@ -109,7 +126,7 @@ function FilteringItem(props: { classes: any }) {
                     others.length > 0 ? (
                         <List>
                             <ListSubheader disableSticky={true}>Others</ListSubheader>
-                            {others.map(x => <HistoryItem key={x.name} item={x} />)}
+                            {others.map(x => <HistoryItem key={x.name} item={x} showInit={true} />)}
                         </List>
                     ) :
                         <></>

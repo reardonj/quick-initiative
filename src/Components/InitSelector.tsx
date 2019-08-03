@@ -5,7 +5,7 @@ type MouseEvt = React.MouseEvent<HTMLElement, MouseEvent>;
 
 const styles = (theme: any) => ({
     button: {
-      margin: theme.spacing.unit,
+      margin: theme.spacing(1),
     }
 });
 

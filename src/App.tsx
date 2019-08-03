@@ -20,10 +20,10 @@ const styles = (theme: any) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
   },
   input: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   toolbar: theme.mixins.toolbar,
 });

@@ -102,8 +102,8 @@ function duplicateInitEntry(item: InitiativeEntry, times: number) {
 }
 
 function removeInitEntry(entry: InitiativeEntry) {
-    const index = initiativeItems.findIndex(x => x == entry.id);
-    if (index == -1) {
+    const index = initiativeItems.findIndex(x => x === entry.id);
+    if (index === -1) {
         throw new Error("Tried to remove initiative entry that doesn't exist. ID:" + entry.id);
     }
     initiativeItems.splice(index, 1);
@@ -112,7 +112,7 @@ function removeInitEntry(entry: InitiativeEntry) {
     updateSurroundingMovement(Math.min(index, initiativeItems.length - 1));
 
     if (combatState instanceof CurrentCombatState) {
-        if (initiativeItems.length == 0) {
+        if (initiativeItems.length === 0) {
             combatState = NotStarted;
         } else if (index >= combatState.activeItem) {
             // The active index has to be updated.
@@ -131,12 +131,12 @@ function removeInitEntry(entry: InitiativeEntry) {
 }
 
 function moveInitEntryDown(entry: InitiativeEntry) {
-    const index = initiativeItems.findIndex(x => x == entry.id);
-    if (index == -1) {
+    const index = initiativeItems.findIndex(x => x === entry.id);
+    if (index === -1) {
         throw new Error("Tried to move initiative entry that doesn't exist. ID:" + entry.id);
     }
 
-    if (index == initiativeItems.length - 1) {
+    if (index === initiativeItems.length - 1) {
         return;
     }
 
