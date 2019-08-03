@@ -21,7 +21,7 @@ function HistoryItem(props: { classes: any, item: HistoryEntry }) {
     }
 
     const handleClick = () => {
-        HistoryModel.toggleFavourite(item.name);
+        //HistoryModel.toggleFavourite(item.name);
     }
 
     return (

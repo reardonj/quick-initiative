@@ -10,7 +10,7 @@ import FilteringItem from './FilteringItem';
 import CombatStatusBar from './CombatStatusBar';
 import InitList from './InitList';
 
-const drawerWidth = 250;
+const drawerWidth = 300;
 
 const styles = (theme: any) => ({
   root: {

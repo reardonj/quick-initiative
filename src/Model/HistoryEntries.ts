@@ -1,8 +1,9 @@
 export class HistoryEntry {
-    isFavourite: boolean;
+
+    groups: Set<string>;
 
     constructor(readonly name: string) {
-        this.isFavourite = false;
+        this.groups = new Set();
     }
 }
 
