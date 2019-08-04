@@ -1,9 +1,10 @@
 import React from 'react';
-import { withStyles, ListItem, ListItemText, ListItemSecondaryAction } from '@material-ui/core';
+import { withStyles, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import { HistoryEntry } from '../Model/HistoryEntries';
 import InitSelector from './InitSelector';
 import * as InitModel from '../Model/InitModel';
 import * as HistoryModel from '../Model/HistoryModel';
+import { Delete } from '@material-ui/icons';
 
 const styles = (theme: any) => ({
     input: {
@@ -32,6 +33,9 @@ function HistoryItem(props: { classes: any, item: HistoryEntry, showInit: boolea
             {
                 props.showInit ? 
                     <ListItemSecondaryAction>
+                        <IconButton onClick={() => HistoryModel.removeHistoryItem(item)}>
+                            <Delete />
+                        </IconButton>
                         <InitSelector disabled={false} onSelected={handleInitSelected} />
                     </ListItemSecondaryAction>
                 : 

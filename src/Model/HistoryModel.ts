@@ -12,6 +12,7 @@ export {
     getHistoryItems,
     addHistoryItem,
     addHistoryItemToGroup,
+    removeHistoryItem,
     removeHistoryItemFromGroup,
     renameGroup,
     saveToLocalStorage
@@ -53,6 +54,12 @@ function addHistoryItem(name: string, groups: string[]) {
             })
         });
     fireHistoryEntryListEvents();
+}
+
+function removeHistoryItem(item: HistoryEntry) {
+    if(historyItems.delete(item.name)) {
+        fireHistoryEntryListEvents();
+    }
 }
 
 function addHistoryItemToGroup(item: HistoryEntry, group: string) {
