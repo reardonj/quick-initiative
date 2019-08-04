@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TableRow, TableCell, withStyles, IconButton, Menu, MenuItem, Typography } from "@material-ui/core";
+import { TableRow, TableCell, withStyles, IconButton, Menu, MenuItem, Typography, ButtonGroup, Button, Grid } from "@material-ui/core";
 import { InitiativeEntry } from "../Model/InitiativeEntries";
 import * as InitModel from "../Model/InitModel";
 import { Delete, ArrowUpward, FileCopy, ArrowDownward } from "@material-ui/icons";
@@ -17,16 +17,19 @@ const styles = (theme: any) => ({
     },
     actionCell: {
         width: 'atuo'
+    },
+    hpControls: {
+        marginRight: theme.spacing(2),
+        alignSelf: 'center'
     }
 });
 
-const duplicates = [1, 2, 3, 4];
+const duplicates = [2, 3, 4, 5];
 
 function InitRow(props: { classes: any, item: InitiativeEntry }) {
     const { classes } = props;
+    const [hp, setHp] = useState(0);
     const item = InitModel.useInitEntryEvents(props.item.id, () => {});
-
-    
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
     const handleClickButton = (event: MouseEvt) => {
@@ -35,7 +38,7 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
 
     const handleMenuItemClick = (event: MouseEvt, index: number) => {
         setAnchor(null);
-        InitModel.duplicateInitEntry(item, duplicates[index]);
+        InitModel.duplicateInitEntry(item, duplicates[index]-1);
     };
 
     const handleClose = () => {
@@ -51,6 +54,29 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
             </TableCell>
             <TableCell className={classes.actionCell} padding="checkbox">
                 <div style={{ display: 'flex' }}>
+                    <Grid item 
+                          alignItems='center'
+                          style={{ alignSelf: 'center'}}>
+                        <ButtonGroup color="primary" variant='contained' size='small'>
+                            <Button onClick={() => setHp(hp - 10)}>-10</Button>
+                            <Button onClick={() => setHp(hp - 5)}>-5</Button>
+                            <Button onClick={() => setHp(hp - 1)}>-1</Button>
+                        </ButtonGroup>
+                    </Grid>
+                    <Grid item
+                          alignItems='center' 
+                          style={{ alignSelf: 'center'}}>                        
+                        <Typography align='center' style={{width: 50}}>{hp}</Typography>
+                    </Grid>
+                    <Grid item
+                          alignItems='center' 
+                          className={classes.hpControls}>
+                        <ButtonGroup color="primary" variant='contained' size='small'>
+                            <Button onClick={() => setHp(hp + 1)}>+1</Button>
+                            <Button onClick={() => setHp(hp + 5)}>+5</Button>
+                            <Button onClick={() => setHp(hp + 10)}>+10</Button>
+                        </ButtonGroup>
+                    </Grid>
                     <IconButton onClick={e => InitModel.moveInitEntryUp(item)} disabled={!item.canMoveUp}>
                         <ArrowUpward />
                     </IconButton>
