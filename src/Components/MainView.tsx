@@ -29,7 +29,7 @@ const styles = (theme: any) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(2),
     marginLeft: drawerWidth
   },
   input: {
