@@ -1,6 +1,6 @@
 # Quick Initiative
 
-This is a simple initiative track for d20 roll-playing games, created largely to experiment with the React library. It runs client-side, and stores data in browser local storage.
+This is a simple initiative tracker for d20 roll-playing games, created largely to experiment with the React library. It runs client-side, and stores data in browser local storage.
 
 ## Create React App
 
