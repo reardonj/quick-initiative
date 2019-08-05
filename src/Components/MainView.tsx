@@ -10,6 +10,7 @@ import FilteringPanel from './FilteringPanel';
 import CombatStatusBar from './CombatStatusBar';
 import InitList from './InitList';
 import NextInitButton from './NextInitButton';
+import InfoDropdown from './InfoDropdown';
 
 const drawerWidth = 300;
 
@@ -54,6 +55,7 @@ function MainView(props: any) {
           </Typography>
           <CombatStatusBar />
           <div className={classes.grow} />
+          <InfoDropdown />
         </Toolbar>
       </AppBar>
       <Drawer
