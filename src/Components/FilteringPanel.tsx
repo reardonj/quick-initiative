@@ -31,7 +31,7 @@ function groupHasText(item: HistoryEntry, filterText: string): boolean {
     return hasText;
 }
 
-function FilteringItem(props: { classes: any }) {
+function FilteringPanel(props: { classes: any }) {
     const { classes } = props;
 
     const inputEl = useRef<HTMLInputElement>(null);
@@ -134,4 +134,4 @@ function FilteringItem(props: { classes: any }) {
     )
 }
 
-export default withStyles(styles)(FilteringItem);
+export default withStyles(styles)(FilteringPanel);

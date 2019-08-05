@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import FilteringItem from './FilteringItem';
+import FilteringPanel from './FilteringPanel';
 import CombatStatusBar from './CombatStatusBar';
 import InitList from './InitList';
 import NextInitButton from './NextInitButton';
@@ -65,7 +65,7 @@ function MainView(props: any) {
         anchor="left"
       >
         <div className={classes.toolbar} />
-        <FilteringItem />
+        <FilteringPanel />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
