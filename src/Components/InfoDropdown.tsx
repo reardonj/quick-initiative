@@ -14,7 +14,7 @@ const styles = (theme: any) => ({
 const actions = [
     { icon: <Home />, 
       name: 'To www.jmreardon.com', 
-      url: "https://www.jmreardon.com"
+      url: "https://www.jmreardon.com/projects/quick_initiative/"
     },
     { icon: <Code />, 
       name: 'Get the Code', 
