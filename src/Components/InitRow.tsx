@@ -16,7 +16,7 @@ const styles = (theme: any) => ({
         width: '100%'
     },
     actionCell: {
-        width: 'atuo'
+        width: 'auto'
     },
     hpControls: {
         marginRight: theme.spacing(2),
@@ -48,6 +48,16 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
 
     return (
         <TableRow selected={item.active}>
+            <TableCell className={classes.actionCell} padding="checkbox">
+                <div style={{ display: 'flex' }}>
+                    <IconButton onClick={e => InitModel.moveInitEntryUp(item)} disabled={!item.canMoveUp}>
+                        <ArrowUpward />
+                    </IconButton>
+                    <IconButton onClick={e => InitModel.moveInitEntryDown(item)} disabled={!item.canMoveDown}>
+                        <ArrowDownward />
+                    </IconButton>
+                </div>
+            </TableCell>
             <TableCell className={classes.initCell}>{item.init}</TableCell>
             <TableCell className={classes.titleCell}>
                 <Typography variant="subtitle1">{item.name}</Typography>
@@ -57,7 +67,7 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
                     <Grid item 
                           alignItems='center'
                           style={{ alignSelf: 'center'}}>
-                        <ButtonGroup color="primary" variant='contained' size='small'>
+                        <ButtonGroup color="primary" variant='outlined' size='small'>
                             <Button onClick={() => setHp(hp - 10)}>-10</Button>
                             <Button onClick={() => setHp(hp - 5)}>-5</Button>
                             <Button onClick={() => setHp(hp - 1)}>-1</Button>
@@ -71,18 +81,12 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
                     <Grid item
                           alignItems='center' 
                           className={classes.hpControls}>
-                        <ButtonGroup color="primary" variant='contained' size='small'>
+                        <ButtonGroup color="primary" variant='outlined' size='small'>
                             <Button onClick={() => setHp(hp + 1)}>+1</Button>
                             <Button onClick={() => setHp(hp + 5)}>+5</Button>
                             <Button onClick={() => setHp(hp + 10)}>+10</Button>
                         </ButtonGroup>
                     </Grid>
-                    <IconButton onClick={e => InitModel.moveInitEntryUp(item)} disabled={!item.canMoveUp}>
-                        <ArrowUpward />
-                    </IconButton>
-                    <IconButton onClick={e => InitModel.moveInitEntryDown(item)} disabled={!item.canMoveDown}>
-                        <ArrowDownward />
-                    </IconButton>
                     <span>
                         <IconButton
                             onClick={handleClickButton}
