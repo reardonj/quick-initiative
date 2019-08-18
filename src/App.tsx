@@ -1,14 +1,9 @@
 import React from 'react';
-import './App.css';
 import MainView from './Components/MainView';
 
 function App(props: any) {
 
-  return (
-    <div className="App">
-      <MainView></MainView>
-    </div>
-  );
+  return <MainView></MainView>;
 }
 
 export default App;

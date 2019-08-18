@@ -1,3 +1,6 @@
+/**
+ * A single previously definined initiative item, and the groups it belongs to.
+ */
 export class HistoryEntry {
 
     groups: Set<string>;
@@ -7,6 +10,9 @@ export class HistoryEntry {
     }
 }
 
+/**
+ * A sorting comparator, using the names of history entries.
+ */
 export function defaultHistoryEntrySort(a: HistoryEntry, b: HistoryEntry): number {
     return a.name.localeCompare(b.name);
 }

@@ -1,3 +1,7 @@
+/*
+  The current state of the initiative order, defined by the current round and
+  index of active initiative item.
+*/
 export class CurrentCombatState {
     /*
         Creates the current combat state. Active items are zero indexed.
@@ -14,5 +18,10 @@ export class CurrentCombatState {
     }
 }
 
+// A constant representing the state where combat hasn't started.
 export const NotStarted : CombatState = 'NotStarted';
+
+// The state of combat is either 
+// - not started; or
+// - the current state of the initiative.
 export type CombatState = 'NotStarted' | CurrentCombatState

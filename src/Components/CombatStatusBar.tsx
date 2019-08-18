@@ -20,9 +20,9 @@ function CombatStatusBar(props: any) {
             Round {combatState.round}
             </Typography>
         );
-    } else {
-        return <></>;
-    }
+    } 
+    
+    return <></>;
 
 }
 

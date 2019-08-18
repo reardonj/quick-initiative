@@ -20,10 +20,20 @@ const styles = () => ({
     }
 });
 
-function groupHasText(item: HistoryEntry, filterText: string): boolean {
+/**
+ * Checks if an entry's name or groups contains a given string, using
+ * case-insensitive comparison.
+ * @param item The item to check.
+ * @param filterText The text to match.
+ */
+function entryHasText(item: HistoryEntry, filterText: string): boolean {
+    if(item.name.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())) {
+        return true;
+    }
+
     let hasText = false;
     item.groups.forEach(x => {
-        if(x.includes(filterText)) {
+        if(x.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())) {
             hasText = true;
         }
     });
@@ -41,32 +51,37 @@ function FilteringPanel(props: { classes: any }) {
     const historyList = HistoryModel.useHistoryItemListEvents(HistoryModel.saveToLocalStorage);
 
     const filteredList = useMemo(
-        () => historyList.filter(x => x.name.includes(filterText) || 
-                                      groupHasText(x, filterText)
-                                ).sort(defaultHistoryEntrySort),
+        () => historyList.filter(x => entryHasText(x, filterText)).sort(defaultHistoryEntrySort),
         [historyList, filterText]);
 
+    // The group for entries about to be added to a named group.
     const pendingGroup = historyList.filter(x => x.groups.has(""));
+
+    // The group for entries in no particular group.
     const others = filteredList.filter(x => x.groups.size === 0);
+
+    // Set up the real groups.
     const groups = new Map<string, HistoryEntry[]>();
     for(const item of filteredList) {
         item.groups.forEach(group => {
             if(isNullOrEmpty(group)) {
                 return;
             }
-            if (!groups.has(group)) {
+
+            const toAdd = groups.get(group) as HistoryEntry[];
+            if (toAdd === undefined) {
                 groups.set(group, []);
             }
-            const toAdd = groups.get(group) as HistoryEntry[];
+            
             toAdd.push(item);
         });
     }
-
 
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setSelectorDisabled(isNullOrEmpty(event.currentTarget.value));
         setFilterText(event.currentTarget.value);
     };
+
     const handleInitSelected = (init: number) => {
         if (inputEl.current == null) {
             return;

@@ -1,8 +1,14 @@
 
 import { CurrentCombatState, NotStarted, CombatState } from "./CombatState";
 import { InitiativeEntry } from "./InitiativeEntries";
-import { createEventHandler, Handler, EventDefinition } from "../Core/EventHandlers";
+import { defineEvent, Handler, EventDefinition } from "../Core/EventHandlers";
 
+/**
+ * This module defines the model for managing the state of initiative items and
+ * the current round.
+ */
+
+ // Export some convenient type aliases.
 export interface InitiativeInfo { entry: InitiativeEntry, handlers: EventDefinition<InitiativeEntry> };
 export type CombatStateHandler = Handler<CombatState>;
 export type InitEntryHandler = Handler<InitiativeEntry[]>
@@ -27,8 +33,11 @@ export {
 /* Combat State */
 
 let combatState = NotStarted;
-const { fire: fireCombatStateEvents, useEvents: useCombatStateEvents } = createEventHandler(() => combatState);
+const { fire: fireCombatStateEvents, useEvents: useCombatStateEvents } = defineEvent(() => combatState);
 
+/**
+ * Start or restart combat.
+ */
 function startCombat() {
     if (initiativeItems.length === 0) {
         return;
@@ -45,7 +54,7 @@ function startCombat() {
 let nextInitId = 0;
 const initiativeItems: number[] = [];
 const initiativeItemLookup: { [id: number]: InitiativeInfo } = {};
-const { fire: fireInitEntryEvents, useEvents: useInitEntryListEvents } = createEventHandler(getInitItems);
+const { fire: fireInitEntryEvents, useEvents: useInitEntryListEvents } = defineEvent(getInitItems);
 
 function useInitEntryEvents(id: number, handler: Handler<InitiativeEntry>) {
     return initiativeItemLookup[id].handlers.useEvents(handler);
@@ -76,15 +85,21 @@ function addInitAtIndex(name: string, init: number, itemIndex: number) {
     }
     initiativeItemLookup[item.id] = {
         entry: item,
-        handlers: createEventHandler(() => initiativeItemLookup[item.id].entry)
+        handlers: defineEvent(() => initiativeItemLookup[item.id].entry)
     };
     updateSurroundingMovement(itemIndex);
     fireInitEntryEvents();
 }
 
+/**
+ * Determines the correct index to insert a new initiative item with the given
+ * initiative. The new item will be inserted below any other items at the same
+ * initiative.
+ * @param init The initiative value being added.
+ */
 function findAddIndex(init: number): number {
     for (var i = 0; i < initiativeItems.length; i++) {
-        if (initIndexToEntry(i).entry.init <= init) {
+        if (initIndexToEntry(i).entry.init < init) {
             return i;
         }
     }
@@ -92,6 +107,12 @@ function findAddIndex(init: number): number {
     return initiativeItems.length;
 }
 
+/**
+ * Duplicates an initiative entry a given number of times, updating the names
+ * to indicate that they are duplicates.
+ * @param item The item to duplicate.
+ * @param times The number of times to duplicate the item.
+ */
 function duplicateInitEntry(item: InitiativeEntry, times: number) {
     const index = initiativeItems.findIndex(x => x === item.id)
     const info = initiativeItemLookup[initiativeItems[index]];
@@ -114,8 +135,10 @@ function removeInitEntry(entry: InitiativeEntry) {
     fireInitEntryEvents();
     updateSurroundingMovement(Math.min(index, initiativeItems.length - 1));
 
+    // Handle the effect of the change on the current combat.
     if (combatState instanceof CurrentCombatState) {
         if (initiativeItems.length === 0) {
+            // Last init? End combat.
             combatState = NotStarted;
         } else if (index >= combatState.activeItem) {
             // The active index has to be updated.
@@ -139,6 +162,7 @@ function moveInitEntryDown(entry: InitiativeEntry) {
         throw new Error("Tried to move initiative entry that doesn't exist. ID:" + entry.id);
     }
 
+    // The last item can't be moved down.
     if (index === initiativeItems.length - 1) {
         return;
     }
@@ -151,6 +175,8 @@ function moveInitEntryUp(entry: InitiativeEntry) {
     if (index === -1) {
         throw new Error("Tried to move initiative entry that doesn't exist. ID:" + entry.id);
     }
+
+    // The fist item can't be moved down.
     if (index === 0) {
         return;
     }
@@ -158,6 +184,12 @@ function moveInitEntryUp(entry: InitiativeEntry) {
     swapInits(index, index - 1);
 }
 
+/**
+ * Swaps the position of two items in initiative order. If one of the items
+ * is the active item.
+ * @param index1 The first index being swapped.
+ * @param index2 The second index being swapped.
+ */
 function swapInits(index1: number, index2: number) {
     var originalEntry = initiativeItems[index1];
     initiativeItems[index1] = initiativeItems[index2];
@@ -186,6 +218,10 @@ function updateMovementForIndex(index: number): (() => void) {
     return entry.handlers.fire;
 }
 
+/**
+ * Updates the movement state for the given index and surrounding indices.
+ * @param index The index to update around.
+ */
 function updateSurroundingMovement(index: number) {
     if (index >= initiativeItems.length || index < 0) {
         return;
