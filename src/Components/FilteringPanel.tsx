@@ -71,9 +71,9 @@ function FilteringPanel(props: { classes: any }) {
             const toAdd = groups.get(group) as HistoryEntry[];
             if (toAdd === undefined) {
                 groups.set(group, []);
+            } else {
+                toAdd.push(item);
             }
-            
-            toAdd.push(item);
         });
     }
 
