@@ -68,7 +68,6 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
                           alignItems='center'
                           style={{ alignSelf: 'center'}}>
                         <ButtonGroup color="primary" variant='outlined' size='small'>
-                            <Button onClick={() => setHp(hp - 10)}>-10</Button>
                             <Button onClick={() => setHp(hp - 5)}>-5</Button>
                             <Button onClick={() => setHp(hp - 1)}>-1</Button>
                         </ButtonGroup>
@@ -84,7 +83,6 @@ function InitRow(props: { classes: any, item: InitiativeEntry }) {
                         <ButtonGroup color="primary" variant='outlined' size='small'>
                             <Button onClick={() => setHp(hp + 1)}>+1</Button>
                             <Button onClick={() => setHp(hp + 5)}>+5</Button>
-                            <Button onClick={() => setHp(hp + 10)}>+10</Button>
                         </ButtonGroup>
                     </Grid>
                     <span>
