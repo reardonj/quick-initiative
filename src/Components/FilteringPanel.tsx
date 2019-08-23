@@ -70,7 +70,7 @@ function FilteringPanel(props: { classes: any }) {
 
             const toAdd = groups.get(group) as HistoryEntry[];
             if (toAdd === undefined) {
-                groups.set(group, []);
+                groups.set(group, [item]);
             } else {
                 toAdd.push(item);
             }
